@@ -14,6 +14,7 @@ import { httpsCallable, getFunctions } from 'firebase/functions';
 
 import { useAuth } from '@/components/auth-provider';
 import { storage } from '@/lib/firebase';
+import { Tooltip } from '@/components/tooltip';
 import { 
   subscribeToDocuments, 
   subscribeToDocumentProcessingStatus, 
@@ -245,6 +246,9 @@ export function DocumentManagement() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  // Check if upload limit is reached (12 files)
+  const isUploadLimitReached = documents.length >= 12;
+
   return (
     <div className="space-y-6">
       <div>
@@ -262,33 +266,50 @@ export function DocumentManagement() {
           <p className="text-gray-600 mb-4">
             Click to select files
           </p>
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploading}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 flex items-center justify-center space-x-2 mx-auto"
+          <Tooltip 
+            content="This demonstration version allows a maximum of 12 document uploads. Please delete some existing documents to upload new ones."
+            disabled={!isUploadLimitReached}
           >
-            {isUploading ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                <span>Uploading...</span>
-              </>
-            ) : (
-              <>
-                <Upload className="h-4 w-4" />
-                <span>Select Files</span>
-              </>
-            )}
-          </button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            accept=".pdf,.doc,.docx,.txt"
-            onChange={(e) => handleFileUpload(e.target.files)}
-            className="hidden"
-          />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading || isUploadLimitReached}
+              className={`px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center space-x-2 mx-auto transition-colors ${
+                isUploadLimitReached 
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                  : 'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500'
+              } ${isUploading ? 'opacity-50' : ''}`}
+            >
+              {isUploading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                  <span>Uploading...</span>
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4" />
+                  <span>Select Files</span>
+                </>
+              )}
+            </button>
+          </Tooltip>
+                      <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept=".pdf,.doc,.docx,.txt"
+              onChange={(e) => handleFileUpload(e.target.files)}
+              className="hidden"
+            />
+            <div className="mt-4 text-sm text-gray-500">
+              {documents.length} of 12 documents uploaded
+              {isUploadLimitReached && (
+                <span className="text-orange-600 font-medium ml-2">
+                  • Limit reached
+                </span>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
 
       {/* Document List */}
       <div className="bg-white rounded-lg shadow-sm border">
