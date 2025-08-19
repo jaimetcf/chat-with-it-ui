@@ -393,8 +393,7 @@ The backend is built as a collection of Google Cloud Functions that provide:
 - **Session Management**: Chat session creation, listing, and deletion
 - **File Management**: Secure file deletion from OpenAI storage and vector stores
 
-
-The server-side code for this project is hosted in a separate repository: [https://github.com/jaimetcf/chat-with-it-server](https://github.com/jaimetcf/chat-with-it-server)
+<br>
 
 For the detailed setup instructions, deployment guides, and technical documentation, please refer to [https://github.com/jaimetcf/chat-with-it-server](https://github.com/jaimetcf/chat-with-it-server).
 
