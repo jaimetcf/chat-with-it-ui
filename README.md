@@ -2,8 +2,7 @@
 
 This is a simple AI-powered document chat application that allows users to upload documents, process them with AI, and have intelligent conversations about their content.
 
-You can access the application by visiting the following URL: [https://chat-with-it.vercel.app/](https://chat-with-it.vercel.app/)
-
+You can access the application by visiting the following URL: [Chat With It](https://chat-with-it-ui.vercel.app/)
 
 ## Technologies Used
 
